@@ -1,0 +1,35 @@
+#
+# Makefile for U6 examples
+#
+
+#MacOS
+CFLAGS = -I. -I/usr/X11R6/include -I/sw/include -c -DDARWIN
+LDFLAGS = -L/usr/X11R6/lib -lGL -lGLU -lglut -lm -framework Cocoa -framework OpenGL -bind_at_load -lpng # -lSDL_image
+
+#Linux
+#CFLAGS +=-Wall -g -I. -I/usr/X11R6/include -I/sw/include -c `sdl-config --cflags` -DLINUX
+#CFLAGS = -I. -I/usr/X11R6/include -I/sw/include -c `sdl-config --cflags` -DLINUX
+#LDFLAGS = -L/usr/X11R6/lib -L/sw/lib -lGL -lGLU -lm -lpng -lz `sdl-config --libs` -lSDL_image
+
+LIBS=-lm -llabjackusb
+
+U6TAPOMETER_SRC = main.cpp labjack_u6tapometer.cpp u6.c
+U6TAPOMETER_OBJ = $(U6TAPOMETER_SRC:.cpp=.o)
+
+#SRCS=$(wildcard *.c *.cpp)
+HDRS=$(wildcard *.h)
+
+
+CPP = g++
+CC = gcc
+
+all: labjack_u6tapometer
+
+labjack_u6tapometer: $(U6TAPOMETER_OBJ) $(HDRS) #main.cpp labjack_u6tapometer.cpp labjack_u6tapometer.h
+	$(CC) -c u6.c -o u6.o 
+	$(CPP) -c labjack_u6tapometer.cpp -o labjack_u6tapometer.o
+	$(CPP) -c main.cpp -o main.o	
+	$(CPP) -o ../TapoMeter main.o labjack_u6tapometer.o u6.o $(LDFLAGS) $(LIBS)
+
+clean:
+	rm -f *.o labjack_u6tapometer 

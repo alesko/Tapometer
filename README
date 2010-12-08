@@ -1,0 +1,26 @@
+Move to src:
+>cd src
+
+Pick the right Makefile,
+For Linux:
+>ln -s Makefile.Linux Makefile
+
+For Mac OS:
+>ln -s Makefile.MacOS Makefile
+
+Compile:
+> make
+
+Move to from src:
+>cd ..
+
+Create a data directory:
+>mkdir data
+
+Start the program:
+>./TapoMeter
+
+Look at the data:
+>cd data
+
+Open the file (with Octave or Matlab)
