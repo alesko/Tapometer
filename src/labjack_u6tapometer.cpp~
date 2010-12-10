@@ -37,10 +37,14 @@
 
 #include "labjack_u6tapometer.h"
 
+using namespace std;
 
 TapoMeter::TapoMeter(int w, int h)
 {
 
+  tstart_ = GetRunTime();
+
+  is_running_ = true;
   screen_width_  = w;
   screen_height_ = h;
   flag_ = 0;
@@ -92,6 +96,16 @@ TapoMeter::~TapoMeter(void)
   
 }
 
+double TapoMeter::GetRunTime(void)
+{
+   double sec = 0;
+   struct timeval tp;
+
+   gettimeofday(&tp,NULL);
+   sec = tp.tv_sec + tp.tv_usec / 1000000.0;
+
+   return(sec);
+}
 
 void TapoMeter::SampleData(void)
 {
@@ -106,11 +120,18 @@ void TapoMeter::SampleData(void)
       exit(0);
     }       
   data_.push_back(dblVoltage);
+  //printf("%f\n",dblVoltage);
   if ( loops_ == 0 )
-    data_file_ << ((double) clock()/(double) CLOCKS_PER_SEC) << " " <<  dblVoltage << ";";
+    data_file_ << (GetRunTime()-tstart_) << " " <<  dblVoltage << ";";
   else
-    data_file_ << std::endl<< ((double) clock()/(double) CLOCKS_PER_SEC) << " " <<  dblVoltage << ";";
+    data_file_ << std::endl<< (GetRunTime()-tstart_) << " " <<  dblVoltage << ";";
+
+  if ( loops_ == 0 )
+    cout << GetRunTime()-tstart_ << " " <<  dblVoltage << ";";
+  else
+    cout << std::endl<< setprecision(12) << GetRunTime()- tstart_ << " " <<  dblVoltage << ";";
   
+
   
   if ( loops_ > 0 )
     {
@@ -278,3 +299,15 @@ int TapoMeter::set_screen_height(int h){
   return(screen_height_);
 }
 
+int TapoMeter::set_fps(int fps){
+  fps_ = fps;
+  return(fps_);
+}
+
+int TapoMeter::get_fps(void){
+  return(fps_);
+}
+
+double TapoMeter::get_tstart(void){
+  return(tstart_);
+}

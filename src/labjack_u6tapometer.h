@@ -37,6 +37,7 @@
 #ifndef LABJACK_u6TAPOMETER_H_
 #define LABJACK_u6TAPOMETER_H_
 
+#define GRAPH 0
 
 #include "u6.h"
 #include <unistd.h>

@@ -48,6 +48,7 @@
 #include <fstream>
 #include <math.h>
 #include <sys/time.h>
+#include <iomanip>
 
 /* OpenGL includes */
 #ifdef __APPLE__
@@ -80,12 +81,17 @@ class TapoMeter{
   int  DrawPlot(std::vector<double> data,double color[3], double t1, double t2);
   void DoRedraw(int flag, std::vector<double> d,double t1, double t2);
 
+  double GetRunTime(void);
+  double get_tstart(void);
+
   bool set_is_running(bool state);
   bool get_is_running(void);
   int get_screen_width(void);
   int get_screen_height(void);
   int set_screen_width(int w);
   int set_screen_height(int h);
+  int set_fps(int fps);
+  int get_fps(void);
 
   void increase_k_(void);
   void increase_c_(void);
@@ -97,10 +103,10 @@ class TapoMeter{
   int screen_width_;       // Screen dimensions       
   int screen_height_;      
   bool is_running_;
+  int fps_;
+  double tstart_;
 
   // Screen handling
-
-  //double targetfps_;      // Target frame rate
       
   // Data storange
   std::ofstream data_file_;
