@@ -111,10 +111,10 @@ void TapoMeter::SampleData(void)
 {
 
   
-  //Read the single-ended voltage from AIN3
+  //Read the single-ended voltage from AIN0
   //printf("\nCalling eAIN to read voltage from AIN0\n");
   double dblVoltage;
-  if((error_ = eAIN(h_device_, &cali_info_, 6, 15, &dblVoltage, 0, 0, 0, 0, 0, 0)) != 0)
+  if((error_ = eAIN(h_device_, &cali_info_, 0, 15, &dblVoltage, 0, 0, 0, 0, 0, 0)) != 0)
     {
       printf("ERROR: Unable to aquire data \n");
       exit(0);

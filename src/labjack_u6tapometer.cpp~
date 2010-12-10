@@ -233,7 +233,8 @@ void TapoMeter::DoRedraw(int flag, std::vector<double> d,double t1, double t2)
     DrawCircle(screen_width_/2,screen_height_/2, screen_height_/4, red);
   if( flag == 1)
     DrawCircle(screen_width_/2,screen_height_/2, screen_height_/4, green);
-  DrawPlot(d,red, t1,t2);
+  if( GRAPH == 1)
+    DrawPlot(d,red, t1,t2);
   glFlush();
   glutSwapBuffers();
 
