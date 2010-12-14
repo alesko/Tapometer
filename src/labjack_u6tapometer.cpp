@@ -110,6 +110,9 @@ double TapoMeter::GetRunTime(void)
 void TapoMeter::SampleData(void)
 {
 
+  double time_now;
+
+  time_now = GetRunTime();
   
   //Read the single-ended voltage from AIN0
   //printf("\nCalling eAIN to read voltage from AIN0\n");
@@ -120,18 +123,36 @@ void TapoMeter::SampleData(void)
       exit(0);
     }       
   data_.push_back(dblVoltage);
+
+  //Read state of FIO0
+  //printf("\nCalling eDI to read the state of FIO3\n");
+  long lng_state;
+  if((error_ = eDI(h_device_, 0, &lng_state)) != 0)
+    printf("\ERROR: When reading FIO0\n");
+  
+  //printf("FIO3 state = %ld\n", lngState);
+  
+  //Set FIO2 to output-high
+  //printf("\nCalling eDO to set FIO1 to output-high\n");
+  if((error_ = eDO(h_device_, 1, lng_state)) != 0)
+    printf("ERROR: When writing to FIO1, state = %ld\n", lng_state);
+  //printf("FIO1 state = %ld\n", lng_state);
+
+
   //printf("%f\n",dblVoltage);
   if ( loops_ == 0 )
-    data_file_ << (GetRunTime()-tstart_) << " " <<  dblVoltage << ";";
+    data_file_ << (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
   else
-    data_file_ << std::endl<< (GetRunTime()-tstart_) << " " <<  dblVoltage << ";";
+    data_file_ << std::endl<< (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
 
-  if ( loops_ == 0 )
+
+
+
+  /*if ( loops_ == 0 )
     cout << GetRunTime()-tstart_ << " " <<  dblVoltage << ";";
   else
     cout << std::endl<< setprecision(12) << GetRunTime()- tstart_ << " " <<  dblVoltage << ";";
-  
-
+  */
   
   if ( loops_ > 0 )
     {
@@ -155,6 +176,11 @@ void TapoMeter::SampleData(void)
   loops_++;
   // Draw OpenGL stuff 
   DoRedraw(flag_,data_,c_,c_*k_);
+
+
+
+
+
   
 }
 
