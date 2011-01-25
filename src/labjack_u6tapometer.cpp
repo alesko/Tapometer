@@ -270,7 +270,9 @@ void TapoMeter::close_LJ_device(void)
 {
   printf("Closing LabJack device!\n");
   closeUSBConnection(h_device_);
-  data_file_ << "];";
+  //data_file_ << "];";
+  data_file_ << "];" << std::endl;
+  data_file_ << "counts=" << counts_ << ";";
   data_file_.close();
   printf("LabJack device closed!\n");
 
