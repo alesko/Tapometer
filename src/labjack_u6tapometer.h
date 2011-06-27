@@ -85,6 +85,7 @@ class TapoMeter{
   double GetRunTime(void);
   double get_tstart(void);
 
+  bool get_power_state(void);
   bool set_is_running(bool state);
   bool get_is_running(void);
   int get_screen_width(void);

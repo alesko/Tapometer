@@ -67,6 +67,9 @@ TapoMeter::TapoMeter(int w, int h)
       printf("ERROR: Unable to get calibration\n");
       exit(0);
     }
+
+  // 
+  get_power_state();
   
   // Open data file for printing
   time_t t = time(0);
@@ -141,10 +144,15 @@ void TapoMeter::SampleData(void)
 
   //printf("%f\n",dblVoltage);
   if ( loops_ == 0 )
-    data_file_ << (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
+    {
+      //data_file_ << (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
+      data_file_ << (time_now-tstart_) << " " <<  dblVoltage <<  ";";
+    }
   else
-    data_file_ << std::endl<< (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
-
+    {
+      //data_file_ << std::endl<< (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
+      data_file_ << std::endl<< (time_now-tstart_) << " " <<  dblVoltage << ";";
+    }
 
 
 
@@ -298,7 +306,28 @@ void TapoMeter::decrease_c_(void)
   if ( c_ > 0 )
     c_ = c_ - dt_c_;
 }
-  
+
+bool TapoMeter::get_power_state(void)
+{
+  //Read the differential voltage from AIN4
+  //printf("\nCalling eAIN to read voltage from AIN0\n");
+  double dblVoltage;
+  if((error_ = eAIN(h_device_, &cali_info_, 4, 5, &dblVoltage, 0, 0, 0, 0, 0, 0)) != 0)
+    {
+      printf("ERROR: Unable to aquire data \n");
+      exit(0);
+    }
+  else
+    {
+      //printf("AIN4-5: %lf \n",dblVoltage);
+      if( dblVoltage < 3.5 )
+	{
+	  printf("ERROR: Power is turned of!\nTurn power on and restart program.\n");
+	  exit(0); 
+	}
+    }
+
+}
 
 bool TapoMeter::set_is_running(bool state){
   is_running_ = state;
