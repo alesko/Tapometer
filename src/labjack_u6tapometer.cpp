@@ -117,10 +117,10 @@ void TapoMeter::SampleData(void)
 
   time_now = GetRunTime();
   
-  //Read the single-ended voltage from AIN0
+  //Read the differtial voltage from AIN0-1
   //printf("\nCalling eAIN to read voltage from AIN0\n");
   double dblVoltage;
-  if((error_ = eAIN(h_device_, &cali_info_, 0, 15, &dblVoltage, 0, 0, 0, 0, 0, 0)) != 0)
+  if((error_ = eAIN(h_device_, &cali_info_, 0, 1, &dblVoltage, 0, 0, 0, 0, 0, 0)) != 0)
     {
       printf("ERROR: Unable to aquire data \n");
       exit(0);
@@ -129,16 +129,16 @@ void TapoMeter::SampleData(void)
 
   //Read state of FIO0
   //printf("\nCalling eDI to read the state of FIO3\n");
-  long lng_state;
-  if((error_ = eDI(h_device_, 0, &lng_state)) != 0)
-    printf("\ERROR: When reading FIO0\n");
+  //long lng_state;
+  //if((error_ = eDI(h_device_, 0, &lng_state)) != 0)
+    //  printf("\ERROR: When reading FIO0\n");
   
   //printf("FIO3 state = %ld\n", lngState);
   
   //Set FIO2 to output-high
   //printf("\nCalling eDO to set FIO1 to output-high\n");
-  if((error_ = eDO(h_device_, 1, lng_state)) != 0)
-    printf("ERROR: When writing to FIO1, state = %ld\n", lng_state);
+  //if((error_ = eDO(h_device_, 1, lng_state)) != 0)
+    //  printf("ERROR: When writing to FIO1, state = %ld\n", lng_state);
   //printf("FIO1 state = %ld\n", lng_state);
 
 
