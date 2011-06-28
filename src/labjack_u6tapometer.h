@@ -70,7 +70,7 @@ class TapoMeter{
 
  public:
 
-  TapoMeter(int w, int h);
+  TapoMeter(int w, int h, float k, float c);
   ~TapoMeter();
 
   int Init(void);
@@ -126,6 +126,8 @@ class TapoMeter{
   float dt_k_;
   float K_MAX;
   float C_MAX;
+  float K_MIN;
+  float C_MIN;
 
   // LabJack 
   HANDLE            h_device_;

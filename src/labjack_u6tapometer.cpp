@@ -39,7 +39,7 @@
 
 using namespace std;
 
-TapoMeter::TapoMeter(int w, int h)
+TapoMeter::TapoMeter(int w, int h, float k, float c)
 {
 
   tstart_ = GetRunTime();
@@ -80,15 +80,38 @@ TapoMeter::TapoMeter(int w, int h)
           lt->tm_hour, lt->tm_min, lt->tm_sec);
  
   data_file_.open(time_str);
-  data_file_ << "data=[";
+  //data_file_ << "data=[";
 
   // Init thresholds
-  k_ = 1.2;
-  c_ = 0.008;
+  k_ = k;
+  c_ = c;
+  /*k_ = 1.3; //
+    c_ = 0.03; //0.008;*/
   dt_c_ = 0.00025;
   dt_k_ = 0.1;
   K_MAX = 10;
   C_MAX = 1.0;
+  K_MIN = 1;
+  C_MIN = 0.0;
+  if( k_ > K_MAX){
+    std::cout << "ERROR: k exceeds max value." << std::endl; 
+    exit(0);
+  }
+  if( c_ > C_MAX)
+    {
+      std::cout << "ERROR: c exceeds max value." << std::endl; 
+      exit(0);
+    }
+  if( k_ < K_MIN )
+    {
+      std::cout << "ERROR: k is below the min limit." << std::endl; 
+      exit(0);
+    }
+  if( c_ < C_MIN)
+    {
+      std::cout << "ERROR: c is below the min limit." << std::endl; 
+      exit(0);
+    }
 
 }
 
@@ -143,18 +166,18 @@ void TapoMeter::SampleData(void)
 
 
   //printf("%f\n",dblVoltage);
-  if ( loops_ == 0 )
+  /*if ( loops_ == 0 )
     {
       //data_file_ << (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
-      data_file_ << (time_now-tstart_) << " " <<  dblVoltage <<  ";";
+      data_file_ << (time_now-tstart_) << " " <<  dblVoltage;  <<  ";";
     }
   else
     {
       //data_file_ << std::endl<< (time_now-tstart_) << " " <<  dblVoltage << " " << lng_state << ";";
       data_file_ << std::endl<< (time_now-tstart_) << " " <<  dblVoltage << ";";
     }
-
-
+  */
+  data_file_ << (time_now-tstart_) << "\t" <<  dblVoltage << std::endl;
 
   /*if ( loops_ == 0 )
     cout << GetRunTime()-tstart_ << " " <<  dblVoltage << ";";
@@ -184,9 +207,6 @@ void TapoMeter::SampleData(void)
   loops_++;
   // Draw OpenGL stuff 
   DoRedraw(flag_,data_,c_,c_*k_);
-
-
-
 
 
   
@@ -279,7 +299,7 @@ void TapoMeter::close_LJ_device(void)
   printf("Closing LabJack device!\n");
   closeUSBConnection(h_device_);
   //data_file_ << "];";
-  data_file_ << "];" << std::endl;
+  //data_file_ << "];" << std::endl;
   data_file_ << "counts=" << counts_ << ";";
   data_file_.close();
   printf("LabJack device closed!\n");
@@ -289,22 +309,27 @@ void TapoMeter::close_LJ_device(void)
 void TapoMeter::increase_k_(void){
   if ( k_ < K_MAX )
     k_ = k_+  dt_k_;
+  printf("Threshold(c) = %f, Multiplier(k) = %f \n",c_,k_);
+
 }
 
 void TapoMeter::increase_c_(void){
   if ( c_ < K_MAX )
     c_ = c_ + dt_c_;
+  printf("Threshold(c) = %f, Multiplier(k) = %f \n",c_,k_);
 }
 
 void TapoMeter::decrease_k_(void){
   if ( k_ > 1 )
     k_ = k_ - dt_k_;
+  printf("Threshold(c) = %f, Multiplier(k) = %f \n",c_,k_);
 }
 
 void TapoMeter::decrease_c_(void)
 {
   if ( c_ > 0 )
     c_ = c_ - dt_c_;
+  printf("Threshold(c) = %f, Multiplier(k) = %f \n",c_,k_);
 }
 
 bool TapoMeter::get_power_state(void)

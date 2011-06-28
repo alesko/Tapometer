@@ -34,7 +34,7 @@
  *
  *********************************************************************/
 
-
+#include <string.h>
 #include "labjack_u6tapometer.h"
 
 TapoMeter *tap_counter;  // Global variable 
@@ -109,9 +109,31 @@ void IsRunning(void)
 
 int main(int argc, char* argv[])
 {
+  float  k = 1.3;
+  float  c = 0.03;
 
+  for(int i = 1; i < argc; i++)
+    {
+      if( 0 == strcmp(argv[i], "-k"))
+	{
+	  if (argv[i+1] != NULL )
+	    {
+	      std::cout << "k:" << atof(argv[i+1]) << std::endl;
+	      k = atof(argv[i+1]);
+	    }
+	}
+      if( 0 == strcmp(argv[i], "-c"))
+	{
+	  if (argv[i+1] != NULL )
+	    {
+	      std::cout << "c:" << atof(argv[i+1]) << std::endl;
+	      c = atof(argv[i+1]);
+	    }
+	}
+
+    }
   // Initialize the LabJack device
-  tap_counter = new TapoMeter(640,480);
+      tap_counter = new TapoMeter(640,480,k,c);
   tap_counter->set_is_running(true);
   tap_counter->set_fps(200.0);
 
