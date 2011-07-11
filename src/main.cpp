@@ -45,12 +45,12 @@ using namespace std;
 void HandleKeyboard(unsigned char key,int x, int y)
 {
   switch (key) {
-  case '<':                           // Decrease multiplier
-  case ',':
+  case ':':                           // Decrease multiplier
+  case '.':
     tap_counter->decrease_k_();
     break;
   case '>':                           // Increase multiplier
-  case '.':
+  case '<':
     tap_counter->increase_k_();
     break;
   case '-':                           // Decrease threshold 
@@ -58,7 +58,7 @@ void HandleKeyboard(unsigned char key,int x, int y)
     tap_counter->decrease_c_();
     break;
   case '+':                           // Increase threshold 
-  case '=':
+  case '?':
     tap_counter->increase_c_();
     break;    
   case 27:                            // Quit
