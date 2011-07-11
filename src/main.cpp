@@ -109,8 +109,8 @@ void IsRunning(void)
 
 int main(int argc, char* argv[])
 {
-  float  k = 1.3;
-  float  c = 0.03;
+  float  k = 1.1;
+  float  c = 0.007;
 
   for(int i = 1; i < argc; i++)
     {
