@@ -73,6 +73,49 @@ void HandleKeyboard(unsigned char key,int x, int y)
   }
 }
 
+void HandleMenu(int selection)
+{
+  
+  switch(selection)
+    {
+    case(1):
+      tap_counter->increase_c_();
+      break;
+    case(2):
+      tap_counter->decrease_c_();
+      break;
+    case(3):
+      tap_counter->increase_k_();
+      break;
+    case(4):
+      tap_counter->decrease_k_();
+      break;
+    case(10):
+      exit(0);
+      break;
+    }
+  
+}
+
+void CreateMenu(void)
+{
+
+  int main_menu;
+  
+  main_menu = glutCreateMenu(HandleMenu);
+  glutAddMenuEntry("Increase threshold",1);
+  glutAddMenuEntry("Decrease threshold",2);
+  glutAddMenuEntry("Increase factor",3);
+  glutAddMenuEntry("Decrease factor",4);
+  glutAddMenuEntry("Quit",10);
+
+  glutAttachMenu(GLUT_RIGHT_BUTTON);
+  
+
+}
+
+
+
 
 void HandleIdle(void)
 {
@@ -144,11 +187,12 @@ int main(int argc, char* argv[])
   glutCreateWindow("Tapometer");
   //glutInitWindowSize(500,500);
   glutReshapeWindow(tap_counter->get_screen_width(),tap_counter->get_screen_height());
-  glutInitWindowPosition(0,0); 
+  glutInitWindowPosition(0,0);
+  CreateMenu();
   glutReshapeFunc(HandleReshape);
   glutKeyboardFunc(HandleKeyboard);
   glutIdleFunc(HandleIdle);
-
+  
   //glutDisplayFunc(display);
   glutDisplayFunc(IsRunning);
   //init();
