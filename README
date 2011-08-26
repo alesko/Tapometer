@@ -11,7 +11,7 @@ For Mac OS:
 Compile:
 > make
 
-Move to from src:
+Move from src:
 >cd ..
 
 Create a data directory:
@@ -29,10 +29,12 @@ where x is the multiplication factor, i.e., to register a tap a
 Example usage:
 ./TapoMeter -c 0.05 -k 1.4
 
-The threshold will be 0.05 (anything below will be regarded as noise) and the multiplication factor will be 1.4 (a force above 1.3*c will trigger the tap detection algorithm).
+The threshold will be 0.05 (anything below will be regarded as noise) and the multiplication factor will be 1.4 (a force above 1.4*c will trigger the tap detection algorithm).
 Default values are c: 0.007, k: 1.1
 
-While the program is running type:
+While the program is running use the mouse to change threshold and multiplier with from the menu (actived by the mouse right button),
+
+or the keybord, by typing:
 +/? to increase the threshold
 -/- to decrease the threshold
 </> to increase the multiplier
